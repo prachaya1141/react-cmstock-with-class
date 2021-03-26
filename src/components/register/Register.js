@@ -1,18 +1,28 @@
 import React, { Component } from "react";
-
+import {httpClient} from "./../../utils/HttpClient";
+import {server} from '../../constants'
 export default class Register extends Component {
+  constructor(props) {
+    super(props);
 
-    constructor(props) {
-        super(props)
-    
-        this.state = {
-            name:"",
-             username:"",
-             password:"",
-             repassword:""
-        }
-    }
-    
+    this.state = {
+      name: "",
+      username: "",
+      password: "",
+      repassword: "",
+    };
+  }
+  onClickRegister = (e) => {
+    e.preventDefault();
+    let {name,username,password} =this.state;
+    let data ={name,username,password}
+    // axios.post("http://localhost:8085/api/v1/authen/register",data).then(response=>{
+    //   alert(JSON.stringify(response.data))
+    // })
+    httpClient.post(server.REGISTER_URL,data).then(response=>{
+        alert(JSON.stringify(response.data))
+      })
+  };
   render() {
     return (
       <div className="hold-transition register-page">
@@ -32,7 +42,9 @@ export default class Register extends Component {
                     name="name"
                     className="form-control"
                     placeholder="Full name"
-                    onChange={(e)=>{this.setState({name:e.target.value})}}
+                    onChange={(e) => {
+                      this.setState({ name: e.target.value });
+                    }}
                   />
                   <div className="input-group-append">
                     <div className="input-group-text">
@@ -42,11 +54,13 @@ export default class Register extends Component {
                 </div>
                 <div className="input-group mb-3">
                   <input
-                  name="username"
+                    name="username"
                     type="email"
                     className="form-control"
                     placeholder="Email"
-                    onChange={(e)=>{this.setState({username:e.target.value})}}
+                    onChange={(e) => {
+                      this.setState({ username: e.target.value });
+                    }}
                   />
                   <div className="input-group-append">
                     <div className="input-group-text">
@@ -56,11 +70,13 @@ export default class Register extends Component {
                 </div>
                 <div className="input-group mb-3">
                   <input
-                  name="password"
+                    name="password"
                     type="password"
                     className="form-control"
                     placeholder="Password"
-                    onChange={(e)=>{this.setState({password:e.target.value})}}
+                    onChange={(e) => {
+                      this.setState({ password: e.target.value });
+                    }}
                   />
                   <div className="input-group-append">
                     <div className="input-group-text">
@@ -73,7 +89,9 @@ export default class Register extends Component {
                     type="password"
                     className="form-control"
                     placeholder="Retype password"
-                    onChange={(e)=>{this.setState({repassword:e.target.value})}}
+                    onChange={(e) => {
+                      this.setState({ repassword: e.target.value });
+                    }}
                   />
                   <div className="input-group-append">
                     <div className="input-group-text">
@@ -81,36 +99,36 @@ export default class Register extends Component {
                     </div>
                   </div>
                 </div>
-                <span>{JSON.stringify(this.state)}</span>
+                {/* <span>{JSON.stringify(this.state)}</span> */}
                 <div className="row">
-            
                   {/* /.col */}
                   <div className="col-12">
-                    <button onClick={(e)=>{
-                        e.preventDefault()
-                        this.props.history.goBack()
-                    }} className="btn btn-primary btn-block">
+                    <button
+                      onClick={this.onClickRegister}
+                      className="btn btn-primary btn-block"
+                    >
                       Register
                     </button>
                   </div>
                   {/* /.col */}
                 </div>
                 <div className="row">
-            
                   {/* /.col */}
                   <div className="col-12">
-                    <button style={{marginTop:8}} onClick={(e)=>{
-                        e.preventDefault()
-                        this.props.history.goBack()
-                    }} className="btn btn-light btn-block">
+                    <button
+                      style={{ marginTop: 8 }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        this.props.history.goBack();
+                      }}
+                      className="btn btn-light btn-block"
+                    >
                       Cancel
                     </button>
                   </div>
                   {/* /.col */}
                 </div>
               </form>
-            
-           
             </div>
             {/* /.form-box */}
           </div>

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import {httpClient} from "./../../utils/HttpClient";
-import {server} from '../../constants'
-export default class Register extends Component {
+import { connect } from "react-redux";
+import { register } from "../../actions/register.action";
+
+export class Register extends Component {
   constructor(props) {
     super(props);
 
@@ -12,17 +13,18 @@ export default class Register extends Component {
       repassword: "",
     };
   }
-  onClickRegister = (e) => {
-    e.preventDefault();
-    let {name,username,password} =this.state;
-    let data ={name,username,password}
-    // axios.post("http://localhost:8085/api/v1/authen/register",data).then(response=>{
-    //   alert(JSON.stringify(response.data))
-    // })
-    httpClient.post(server.REGISTER_URL,data).then(response=>{
-        alert(JSON.stringify(response.data))
-      })
+  showError = () => {
+    return (
+      <div className="alert alert-danger alert-dismissible">
+    
+        <h4>
+          <i className="icon fa fa-ban" /> Error!
+        </h4>
+        Incorrect infomation
+      </div>
+    );
   };
+
   render() {
     return (
       <div className="hold-transition register-page">
@@ -99,12 +101,16 @@ export default class Register extends Component {
                     </div>
                   </div>
                 </div>
-                {/* <span>{JSON.stringify(this.state)}</span> */}
+                {this.props.registerReducer.isError&&this.showError()}
+
                 <div className="row">
                   {/* /.col */}
                   <div className="col-12">
                     <button
-                      onClick={this.onClickRegister}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        this.props.register(this.props.history, this.state);
+                      }}
                       className="btn btn-primary btn-block"
                     >
                       Register
@@ -139,3 +145,9 @@ export default class Register extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ registerReducer }) => ({ registerReducer });
+const mapDispatchToProps = {
+  register,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Register);

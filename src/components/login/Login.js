@@ -72,7 +72,7 @@ export default class Login extends Component {
                   {/* /.col */}
                   <div className="col-12">
                     <button
-                      class="btn btn-light btn-block"
+                      className="btn btn-light btn-block"
                       style={{ marginTop: 8 }}
                       onClick={() => this.props.history.push("/register")}
                     >

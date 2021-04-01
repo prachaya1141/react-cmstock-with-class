@@ -1,6 +1,10 @@
 import React, { Component } from "react";
+import { server } from "../../constants";
+import {withRouter} from "react-router-dom"
+import * as actions from "../../actions/login.action"
+import { connect } from "react-redux";
 
-export default class Header extends Component {
+class Header extends Component {
   render() {
     return (
       <div>
@@ -204,6 +208,23 @@ export default class Header extends Component {
                 <i className="fas fa-th-large" />
               </a>
             </li>
+            <li className="nav-item" onClick={()=>
+            {
+              console.log(this.props.history)
+              this.props.history.push("/login")
+              localStorage.removeItem(server.LOGIN_PASSED)
+              this.props.appReducer.app.forceUpdate();
+            }
+            }>
+              <a
+                className="nav-link"
+                data-widget="sign out"
+                href="#"
+                role="button"
+              >
+                <i className="fas fa-sign-out-alt" />
+              </a>
+            </li>
           </ul>
         </nav>
         {/* /.navbar */}
@@ -211,3 +232,12 @@ export default class Header extends Component {
     );
   }
 }
+const mapStateToProps = ({appReducer}) => ({
+  appReducer
+})
+
+const mapDispatchToProps = {
+}
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(Header))

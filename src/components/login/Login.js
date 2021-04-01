@@ -1,24 +1,29 @@
 import React, { Component } from "react";
 import { httpClient } from "./../../utils/HttpClient";
-import {server} from '../../constants'
+import { server } from "../../constants";
 import { Link } from "react-router-dom";
-export default class Login extends Component {
+import { connect } from "react-redux";
+import { login,autoLogin } from "../../actions/login.action";
+class Login extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {username:"",password:""};
+    this.state = { username: "", password: "" };
   }
-  onSignIn = async (e)=>{
-    e.preventDefault()
-    try{
-      let data= this.state
-      let response = await httpClient.post(server.LOGIN_URL,data)
-      alert(JSON.stringify(response.data)) 
-    }catch(error){
-      alert(JSON.stringify(error)) 
-    }
-   
+  componentDidMount(){
+    this.props.autoLogin(this.props.history)
   }
+  showError = () => {
+    return (
+      <div className="alert alert-danger alert-dismissible">
+    
+        <h4>
+          <i className="icon fa fa-ban" /> Error!
+        </h4>
+        Incorrect infomation
+      </div>
+    );
+  };
   render() {
     return (
       <div className="hold-transition login-page">
@@ -38,7 +43,9 @@ export default class Login extends Component {
                     type="email"
                     className="form-control"
                     placeholder="Email"
-                    onChange={(e)=>{this.setState({username:e.target.value})}}
+                    onChange={(e) => {
+                      this.setState({ username: e.target.value });
+                    }}
                   />
                   <div className="input-group-append">
                     <div className="input-group-text">
@@ -51,7 +58,9 @@ export default class Login extends Component {
                     type="password"
                     className="form-control"
                     placeholder="Password"
-                    onChange={(e)=>{this.setState({password:e.target.value})}}
+                    onChange={(e) => {
+                      this.setState({ password: e.target.value });
+                    }}
                   />
                   <div className="input-group-append">
                     <div className="input-group-text">
@@ -59,10 +68,18 @@ export default class Login extends Component {
                     </div>
                   </div>
                 </div>
+                {this.props.loginReducer.isError?this.showError():null}
                 <div className="row">
                   {/* /.col */}
                   <div className="col-12">
-                    <button  className="btn btn-primary btn-block" onClick={this.onSignIn}>
+                    <button
+                      className="btn btn-primary btn-block"
+                      onClick={(e) => {
+                
+                        e.preventDefault();
+                        this.props.login(this.props.history, this.state);
+                      }}
+                    >
                       Sign In
                     </button>
                   </div>
@@ -104,3 +121,8 @@ export default class Login extends Component {
     );
   }
 }
+const mapStateToProps = ({ loginReducer }) => ({ loginReducer });
+const mapDispatchToProps ={
+  login,autoLogin
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

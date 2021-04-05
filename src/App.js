@@ -5,6 +5,8 @@ import Footer from "./components/share/Footer";
 import Header from "./components/share/Header";
 import Sidebar from "./components/share/Sidebar";
 import Stock from "./components/stock/stock";
+import StockCreate from "./components/stockCreate/stockCreate";
+import StockEdit from "./components/stockEdit/stockEdit";
 import { setApp } from "./actions/app.action";
 
 import {
@@ -50,6 +52,8 @@ class App extends Component {
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
             <SecuredRoute path="/stock" component={Stock} />
+            <SecuredRoute path="/stock-create" component={StockCreate}/>
+            <SecuredRoute path="/stock-edit/:id" component={StockEdit}/>    
             <Route exact={true} path="/" component={this.redirectToLogin} />
             <Route exact={true} path="*" component={this.redirectToLogin} />
           </Switch>

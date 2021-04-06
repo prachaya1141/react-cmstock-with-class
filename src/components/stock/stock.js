@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import {Link} from "react-router-dom"
 import { imageUrl } from "./../../constants";
 import { connect } from "react-redux";
+import _ from "lodash";
+import Moment from "react-moment";
 import NumberFormat from "react-number-format";
 import * as actions from "../../actions/stock.action";
 import Swal from "sweetalert2";
@@ -10,6 +12,7 @@ const MySwal = withReactContent(Swal);
 class Stock extends Component {
     componentDidMount() {
         this.props.getProducts();
+        this.debounceSearch =_.debounce(this.props.getProductByKeyword,500)
       }
   renderRows = () => {
     const {result,isFetching} = this.props.stockReducer;
@@ -17,7 +20,7 @@ class Stock extends Component {
       return (!isFetching&&result != null&&result.map((item) => (
         
         <tr key={item.id}>
-          <td>{item.createdAt}</td>
+          <td><Moment format="DD/MM/YYYY H:mm:ss">{item.createdAt}</Moment></td>
           <td><span style={{ marginRight: 10, minHe: 100 }}>
                 <img
                   src={`${imageUrl}/images/${
@@ -81,6 +84,10 @@ class Stock extends Component {
       );
     
   };
+  onChange=(e)=>{
+    e.persist();
+    this.debounceSearch(e)
+  }
   render() {
     return (
       <div className="content-wrapper">

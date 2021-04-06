@@ -6,6 +6,7 @@ const constants = require("./constant");
 const formidable = require("formidable");
 const path = require("path");
 const fs = require("fs-extra");
+const Op = Sequelize.Op;
 
 uploadImage = async (files, doc) => {
   if (files.image != null) {
